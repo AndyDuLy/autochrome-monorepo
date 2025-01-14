@@ -13,3 +13,5 @@ https://blog.scienceandmediamuseum.org.uk/autochromes-the-dawn-of-colour-photogr
 
 fe :// npm run dev :// http://localhost:5173/
 be :// npm run dev :// http://localhost:3000/
+
+[archived repo with original autochroming service concept](https://github.com/AndyDuLy/programmatic-autochrome)
