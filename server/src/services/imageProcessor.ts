@@ -10,10 +10,9 @@ interface ProcessingOptions {
 function applyColorTint(image: jimp, color: string, opacity: number): void {
   const tint = new jimp(image.bitmap.width, image.bitmap.height, color);
 
-  // Blend the tint with the original image
   image.composite(tint, 0, 0, {
     mode: jimp.BLEND_MULTIPLY,
-    opacitySource: opacity / 100,
+    opacitySource: opacity,
     opacityDest: 0.5,
   });
 }
@@ -24,20 +23,23 @@ export async function processImage(
   options: ProcessingOptions = {}
 ): Promise<void> {
   try {
-    // Read the input image
     const image = await jimp.read(inputPath);
 
     if (!image) {
       throw new Error("Failed to load image");
     }
 
-    // Fixing hue shift step
-    applyColorTint(image, "#00FF00", 0.5);
-    applyColorTint(image, "#FF00FF", 0.3);
-    applyColorTint(image, "#FFFF00", 0.3);
-    //
+    if (options.greenTint) {
+      // todo: sliders
+      applyColorTint(image, "#00FF00", options.greenTint / 100);
+    }
+    if (options.magentaTint) {
+      applyColorTint(image, "#FF00FF", options.magentaTint / 100);
+    }
+    if (options.yellowTint) {
+      applyColorTint(image, "#FFFF00", options.yellowTint / 100);
+    }
 
-    // Reduce saturation for muted pastel
     image.scan(
       0,
       0,
@@ -55,7 +57,6 @@ export async function processImage(
       }
     );
 
-    // Film Grain with configurable intensity
     const grainIntensity = options.filmGrain
       ? (options.filmGrain / 100) * 30
       : 15;
@@ -84,7 +85,6 @@ export async function processImage(
       }
     );
 
-    // Vignette
     const width = image.bitmap.width;
     const height = image.bitmap.height;
     const centerX = width / 2;
@@ -111,7 +111,6 @@ export async function processImage(
       }
     );
 
-    // Ensure the uploads directory exists
     await image.writeAsync(outputPath);
   } catch (error) {
     console.error("Error in processImage:", error);
