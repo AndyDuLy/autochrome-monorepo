@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
-import { Upload } from "lucide-react";
 
 const ImageProcessor = () => {
   const [originalImage, setOriginalImage] = useState("");
